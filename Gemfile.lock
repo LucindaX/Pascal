@@ -20,6 +20,7 @@ GEM
       concurrent-ruby (~> 1.0)
     minitest (5.10.3)
     mustermann (1.0.1)
+    mysql2 (0.3.21)
     rack (2.0.3)
     rack-protection (2.0.0)
       rack
@@ -45,6 +46,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  mysql2 (~> 0.3.20)
   rake
   sinatra
   sinatra-activerecord

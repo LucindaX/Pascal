@@ -1,0 +1,10 @@
+default: &default
+  adapter: mysql2
+  pool: 5
+
+development:
+  <<: *default
+  database: url-shortner
+  username: root
+  password: mysql 
+  host: localhost
