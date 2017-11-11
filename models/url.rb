@@ -11,6 +11,7 @@ class Url < ActiveRecord::Base
 
   def clean_url
     self.url = url.gsub(/^https?:\/\//, "")
+    self.url.gsub!(/^www./, "")
     self.url.gsub!(/\/$/, "")
   end
 
