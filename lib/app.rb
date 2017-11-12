@@ -3,35 +3,48 @@ $LOAD_PATH.push File.expand_path('../..', __FILE__)
 
 require 'sinatra/base'
 require 'sinatra/activerecord'
+require 'sinatra/reloader'
 require 'models/url'
 require 'yaml'
 require 'json'
 
 class App < Sinatra::Base
+
+  configure :development do
+    register Sinatra::Reloader
+  end 
   
   register Sinatra::ActiveRecordExtension
-  
+ 
   set :root, File.expand_path('../..', __FILE__)
   
   set :public_folder, "#{root}/public"
 
+  set :views, File.join("#{root}", "views")
+
   set :database_file, "#{root}/database.yml"
 
-  post '/url' do
-    url = params[:url]
-    record = Url.find_or_initialize_by({ url: Url.clean_url(url) })
-    if record.new_record?
-      if record.save
-        { short: record.short }.to_json
-      else
-        halt 422, "Could not process request"
-      end
-    else
-      halt 303, { short: record.short }.to_json
-    end
+  get "/" do
+    erb :index
   end
 
-  get '/*' do
+  post "/url" do
+    url = params[:url]
+    halt 400 if params[:url].nil?
+
+    record = Url.find_or_initialize_by({ url: Url.clean_url(url) })
+
+    if record.new_record?
+
+      halt 422, "Could not process request" if !record.save
+
+    end
+
+    erb :preview, :locals => { short: record.short, host: request.host }
+
+  end
+
+  get "/*" do
     short = params['splat']
     record = Url.find_by(short: short)
     if record
