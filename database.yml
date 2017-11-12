@@ -1,10 +1,17 @@
 default: &default
-  adapter: mysql2
+  adapter: postgresql
   pool: 5
 
 development:
   <<: *default
   database: url-shortner
-  username: root
-  password: mysql 
+  username: sa3eed
+  password: psql
   host: localhost
+
+production:
+  <<: *default
+  database: url-shortner_production
+  username: myapp
+  password: <%= ENV['MYAPP_DATABASE_PASSWORD'] %>
+

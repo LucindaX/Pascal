@@ -19,11 +19,15 @@ class App < Sinatra::Base
 
   post '/url' do
     url = params[:url]
-    record = Url.new({ url: url })
-    if record.save
-      { short: record.short }.to_json
+    record = Url.find_or_initialize_by({ url: Url.clean_url(url) })
+    if record.new_record?
+      if record.save
+        { short: record.short }.to_json
+      else
+        halt 422, "Could not process request"
+      end
     else
-      halt 410, "What the fuck"
+      halt 303, { short: record.short }.to_json
     end
   end
 
@@ -32,7 +36,7 @@ class App < Sinatra::Base
     record = Url.find_by(short: short)
     if record
       record.increment!(:visit_count)
-      { url: record.url }.to_json
+      redirect record.url
     else
       halt 404, "Not Found"
     end
