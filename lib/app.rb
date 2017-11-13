@@ -36,7 +36,7 @@ class App < Sinatra::Base
 
     if record.new_record?
 
-      halt 422 if !record.save
+      halt 422, "Cannot process request" if !record.save
 
     end
 
