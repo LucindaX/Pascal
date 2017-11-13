@@ -36,7 +36,7 @@ class App < Sinatra::Base
 
     if record.new_record?
 
-      halt 422, "Could not process request" if !record.save
+      halt 422 if !record.save
 
     end
 
@@ -51,8 +51,12 @@ class App < Sinatra::Base
       record.increment!(:visit_count)
       redirect record.url
     else
-      halt 404, "Not Found"
+      halt 404
     end
+  end
+
+  error 404 do
+    send_file File.join(settings.public_folder, '404.html')
   end
 
 end
