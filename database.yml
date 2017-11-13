@@ -5,9 +5,9 @@ default: &default
 development:
   <<: *default
   database: url-shortner
-  username: sa3eed
-  password: psql
   host: localhost
+  username:
+  password: 
 
 production:
   <<: *default
