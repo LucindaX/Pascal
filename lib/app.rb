@@ -32,7 +32,8 @@ class App < Sinatra::Base
     url = params[:url]
     halt 400 if params[:url].nil?
 
-    record = Url.find_or_initialize_by({ url: Url.clean_url(url) })
+    record = Url.find_or_initialize_by({ url: Url.clean_url(url)})
+    record.base_url = base_url
 
     if record.new_record?
 
@@ -57,6 +58,12 @@ class App < Sinatra::Base
 
   error 404 do
     send_file File.join(settings.public_folder, '404.html')
+  end
+
+  helpers do
+    def base_url
+      @base_url ||= "#{request.env['rack.url_scheme']}://#{request.env['HTTP_HOST']}"
+    end
   end
 
 end

@@ -4,10 +4,7 @@ default: &default
 
 development:
   <<: *default
-  database: url-shortner
-  host: localhost
-  username:
-  password: 
+  database: url-shortner 
 
 production:
   <<: *default
